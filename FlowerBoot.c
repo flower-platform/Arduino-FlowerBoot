@@ -1,3 +1,19 @@
+/* license-start
+ * 
+ * Copyright (C) 2016 Crispico Resonate, <http://www.crispico.com/>.
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation version 3.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details, at <http://www.gnu.org/licenses/>.
+ * 
+ * license-end
+ */
+
 #include "sam.h"
 
 void flowerBoot();
@@ -17,7 +33,7 @@ __attribute__ ((section(".flower_boot"))) void dummyBlockingHandler() {
 }
 
 __attribute__ ((section(".flower_boot_isr_vector")))
-const void* fb_exception_table[] = {
+const void* vector_table[] = {
   (void*) (0x20008000), // stack
   (void*) flowerBoot, // reset vector
   (void*) dummyBlockingHandler,
@@ -61,7 +77,7 @@ void flowerBoot() {
   
   // address of Reset_Handler is written by the linker at the beginning of the .text section (see linker script)
   uint32_t resetHandlerAddress = *(uint32_t*)(TEXT_START + 4);
-  // jump to Reset_Handler
+  // jump to reset handler
   asm("bx %0"::"r"(resetHandlerAddress));
 }
 
